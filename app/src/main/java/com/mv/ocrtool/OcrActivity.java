@@ -12,10 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Document;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.OutputStream;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 public class OcrActivity extends AppCompatActivity {
 
     private TextView detectedTextView;
@@ -110,6 +116,100 @@ public class OcrActivity extends AppCompatActivity {
         // The registered callback will be called upon final directory selection.
         directoryChooserDialog.chooseDirectory(m_chosenDir);
         m_newFolderEnabled = ! m_newFolderEnabled;
+    }
+
+    public void toPDF(View view) {
+        m_chosenDir = "";
+        boolean m_newFolderEnabled = true;
+        DirectoryChooserDialog directoryChooserDialog =
+                new DirectoryChooserDialog(OcrActivity.this,
+                        new DirectoryChooserDialog.ChosenDirectoryListener()
+                        {
+                            @Override
+                            public void onChosenDir(String chosenDir)
+                            {
+                                m_chosenDir = chosenDir;
+                                Toast.makeText(
+                                        OcrActivity.this, "Chosen directory: " +
+                                                m_chosenDir, Toast.LENGTH_LONG).show();
+                                LayoutInflater li = LayoutInflater.from(OcrActivity.this);
+                                View promptsView = li.inflate(R.layout.prompt, null);
+
+                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                        OcrActivity.this);
+
+                                // set prompts.xml to alertdialog builder
+                                alertDialogBuilder.setView(promptsView);
+
+                                final EditText userInput = (EditText) promptsView
+                                        .findViewById(R.id.editTextDialogUserInput);
+
+                                // set dialog message
+                                alertDialogBuilder
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog,int id) {
+                                                        // get user input and set it to result
+                                                        // edit text
+                                                        fileName = userInput.getText().toString();
+                                                        try {
+                                                            String Mytextmessage  = detectedTextView.getText().toString();
+                                                            File myFile = new File(m_chosenDir + "/" + fileName + ".pdf");
+
+                                                            OutputStream output = new FileOutputStream(myFile);
+
+                                                            //Step 1
+                                                            Document document = new Document();
+
+                                                            //Step 2
+                                                            PdfWriter.getInstance(document, output);
+
+                                                            //Step 3
+                                                            document.open();
+
+                                                            //Step 4 Add content
+                                                            document.add(new Paragraph(Mytextmessage));
+
+                                                            //Step 5: Close the document
+                                                            document.close();
+                                                            Toast.makeText(getApplicationContext(),"PDF created",Toast.LENGTH_LONG).show();
+                                                            detectedTextView.setText("");
+                                                        } catch (FileNotFoundException e) {
+                                                            e.printStackTrace();
+                                                        } catch (DocumentException e) {
+                                                            e.printStackTrace();
+                                                        } finally {
+                                                            Toast.makeText(getApplicationContext(), "WOrks?", Toast.LENGTH_LONG);
+                                                        }
+
+
+                                                    }
+                                                })
+                                        .setNegativeButton("Cancel",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog,int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
+
+                                // create alert dialog
+                                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                                // show it
+                                alertDialog.show();
+
+
+                            }
+                        });
+        // Toggle new folder button enabling
+        directoryChooserDialog.setNewFolderEnabled(m_newFolderEnabled);
+        // Load directory chooser dialog for initial 'm_chosenDir' directory.
+        // The registered callback will be called upon final directory selection.
+        directoryChooserDialog.chooseDirectory(m_chosenDir);
+        m_newFolderEnabled = ! m_newFolderEnabled;
+
+
     }
 
     public interface ChosenDirectoryListener {

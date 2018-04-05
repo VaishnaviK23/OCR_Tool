@@ -40,6 +40,17 @@
         android:onClick="write"
         android:layout_centerHorizontal="true"/>
 
+    <Button
+        android:id="@+id/to_pdf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/take_a_photo"
+        android:text="@string/to_pdf"
+        android:onClick="toPDF"
+        tools:context=".MainActivity" />
+
 
 
 <!--/android.support.constraint.ConstraintLayout-->
