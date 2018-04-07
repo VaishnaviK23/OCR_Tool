@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".MainActivity" />
         <activity android:name="net.rdrei.android.dirchooser.DirectoryChooserActivity" />
 
         <meta-data
