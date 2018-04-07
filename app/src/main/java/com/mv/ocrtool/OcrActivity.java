@@ -222,6 +222,18 @@ public class OcrActivity extends AppCompatActivity {
         }
     }
 
+    public void implementSpellChecker() {
+        final TextServicesManager tsm = (TextServicesManager)
+                getSystemService(Context.TEXT_SERVICES_MANAGER_SERVICE);
+        try {
+            mScs = tsm.newSpellCheckerSession(null, null, this, true);
+
+            mScs.getSuggestions(new TextInfo(detectedTextView.getText().toString()), 3);
+        } catch(NullPointerException e) {
+            Log.w(TAG, "Failed to find the file: ", e);
+        }
+    }
+
     public interface ChosenDirectoryListener {
         public void onChosenDir(String chosenDir);
     }
