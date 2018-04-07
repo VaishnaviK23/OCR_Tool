@@ -212,6 +212,16 @@ public class OcrActivity extends AppCompatActivity {
 
     }
 
+    public void toSpeech(View view) {
+        if(t1.isSpeaking())
+            t1.stop();
+        else {
+            String toSpeak = detectedTextView.getText().toString();
+            Toast.makeText(getApplicationContext(), toSpeak, Toast.LENGTH_SHORT).show();
+            t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
+
     public interface ChosenDirectoryListener {
         public void onChosenDir(String chosenDir);
     }

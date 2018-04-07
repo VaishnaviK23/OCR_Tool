@@ -51,6 +51,16 @@
         android:onClick="toPDF"
         tools:context=".MainActivity" />
 
+    <Button
+        android:id="@+id/to_speech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/take_a_photo"
+        android:layout_centerHorizontal="true"
+        android:onClick="toSpeech"
+        android:text="@string/to_speech"
+        tools:context=".MainActivity" />
+
 
 
 <!--/android.support.constraint.ConstraintLayout-->
